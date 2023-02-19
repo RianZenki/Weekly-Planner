@@ -1,0 +1,55 @@
+.dashboard-action-container form {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-top: 34px;
+   padding: 0px 24px;
+}
+
+.inputs-wrapper input,
+.inputs-wrapper select {
+   height: 45px;
+   background-color: transparent;
+   color: rgba(0, 0, 0, 0.7);
+   border: 1px solid #FECE00;
+   border-radius: 10px;
+   margin-left: 2px;
+   padding: 12px 8px;
+   outline: none;
+}
+
+.inputs-wrapper input {
+   width: 390px;
+}
+
+.inputs-wrapper select {
+   padding: 12px 30px 12px 8px;
+}
+
+.buttons-wrapper {
+   display: flex;
+   gap: 24px;
+}
+
+.buttons-wrapper button {
+   width: 200px;
+   height: 45px;
+   border: none;
+   border-radius: 10px;
+   color: #FFFFFF;
+   font-size: 20px;
+   font-weight: 700;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   cursor: pointer;
+   gap: 4px;
+}
+
+.buttons-wrapper .add {
+   background-color: #00BA88;
+}
+
+.buttons-wrapper .delete {
+   background-color: #FF3D1F;
+}
