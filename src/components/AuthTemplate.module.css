@@ -1,0 +1,29 @@
+.container {
+   display: flex;
+}
+
+.container main {
+   background: linear-gradient(#33383d, #1c1d20);
+   width: 50vw;
+   height: 100vh;
+   color: #E0E0E0;
+
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+}
+
+.aside-image {
+   width: 50vw;
+   background-image: url(../assets/computer.png);
+   background-position: center;
+   background-size: cover;
+
+   text-align: center;
+}
+
+.aside-image img {
+   margin-top: 36px;
+   
+}
