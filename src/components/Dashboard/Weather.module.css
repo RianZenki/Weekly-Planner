@@ -1,0 +1,30 @@
+.weather-container {
+   width: 155px;
+   display: flex;
+   flex-direction: column;
+   color: #222222;
+}
+
+.temp-wrapper {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.location {
+   text-align: center;
+   font-size: 14px;
+}
+
+.temp {
+   font-size: 48px;
+   font-weight: 700;
+   margin-left: 12px;
+}
+
+.error {
+   font-size: 18px;
+   font-weight: 600;
+   margin-top: 15px;
+   white-space: nowrap;
+}
