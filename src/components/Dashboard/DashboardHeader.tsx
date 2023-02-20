@@ -13,6 +13,8 @@ export const DashboardHeader = () => {
 	const navigate = useNavigate();
 
 	const logoutHandler = () => {
+		localStorage.removeItem("user");
+		localStorage.removeItem("authenticated");
 		navigate("/");
 	};
 
@@ -29,7 +31,7 @@ export const DashboardHeader = () => {
 
 			<Weather />
 
-			<div className={classes.actions} onClick={logoutHandler}>
+			<div className={classes.actions}>
 				<Link to="https://compass.uol/en/home/" target="_black">
 					<img
 						className={classes.logo}
@@ -37,7 +39,7 @@ export const DashboardHeader = () => {
 						alt="Compass.uol logo"
 					/>
 				</Link>
-				<div className={classes.logout}>
+				<div className={classes.logout} onClick={logoutHandler}>
 					<img className={classes.arrow} src={arrow} alt="Arrow" />
 					<p>Logout</p>
 				</div>
