@@ -27,12 +27,14 @@ type taskContextType = {
 	onWeekdayChange: (weekday: string) => void;
 	onAddTask: (task: newTaskType) => void;
 	onDeleteAllTasks: (weekday: string) => void;
+	onDeleteTaskById: (id: string, time: string, weekday: string) => void;
 };
 
 export const TaskContext = React.createContext<taskContextType>({
 	tasks: [],
-	weekdaySelected: "Tuesday",
+	weekdaySelected: "Monday",
 	onWeekdayChange: (weekday: string) => {},
 	onAddTask: (task: newTaskType) => {},
 	onDeleteAllTasks: (weekday: string) => {},
+	onDeleteTaskById: (id: string) => {},
 });

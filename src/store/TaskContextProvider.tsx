@@ -70,6 +70,26 @@ export const TaskContextProvider = ({ children }: childrenProps) => {
 		setTasks(oldTasks);
 	};
 
+	const deleteTaskByIdHandler = (
+		id: string,
+		time: string,
+		weekday: string
+	) => {
+		const oldTasks = [...tasks];
+		const weekdayIndex = getWeekdayIndex(weekday);
+		const taskTimeIndex = oldTasks[weekdayIndex].taskList.findIndex(
+			(item) => item.time === time
+		);
+		const taskIndex = oldTasks[weekdayIndex].taskList[
+			taskTimeIndex
+		].tasks.findIndex((item) => item.id === id);
+		oldTasks[weekdayIndex].taskList[
+			taskTimeIndex
+		].tasks.splice(taskIndex, 1);
+
+		setTasks(oldTasks)
+	};
+
 	const deleteAllTasksHandler = (weekday: string) => {
 		const oldTasks = [...tasks];
 		const weekdayIndex = getWeekdayIndex(weekday);
@@ -84,6 +104,7 @@ export const TaskContextProvider = ({ children }: childrenProps) => {
 		onWeekdayChange: weekdayChangeHandler,
 		onAddTask: addTaskHandler,
 		onDeleteAllTasks: deleteAllTasksHandler,
+		onDeleteTaskById: deleteTaskByIdHandler,
 	};
 
 	return (

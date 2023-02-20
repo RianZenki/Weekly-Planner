@@ -36,6 +36,8 @@ export const BoardRow = ({ data }: BoardRowProps) => {
 						<TaskCard
 							className={taskClass}
 							description={task.description}
+							time={data.time}
+							id={task.id}
 						/>
 					</li>
 				))}
