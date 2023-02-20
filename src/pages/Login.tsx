@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { AuthTemplate } from "../components/AuthTemplate";
 import { Heading } from "../components/Heading";
@@ -11,9 +11,12 @@ import classes from "./Login.module.css";
 
 export const Login = () => {
 	const userRef = useRef<HTMLInputElement>(null);
-	const passRef = useRef<HTMLInputElement>(null);
+	const passwordRef = useRef<HTMLInputElement>(null);
 	const [userIsFocus, setUserIsFocus] = useState(false);
-	const [passIsFocus, setpassIsFocus] = useState(false);
+	const [passwordIsFocus, setPasswordIsFocus] = useState(false);
+	const [showError, setShowError] = useState(false);
+
+	const navigate = useNavigate();
 
 	const userFocusHandler = () => {
 		setUserIsFocus(true);
@@ -25,19 +28,46 @@ export const Login = () => {
 		}
 	};
 
-	const passFocusHandler = () => {
-		setpassIsFocus(true);
+	const passwordFocusHandler = () => {
+		setPasswordIsFocus(true);
 	};
 
-	const passBlurHandler = () => {
-		if (passRef.current!.value.trim().length === 0) {
-			setpassIsFocus(false);
+	const passwordBlurHandler = () => {
+		if (passwordRef.current!.value.trim().length === 0) {
+			setPasswordIsFocus(false);
 		}
 	};
 
 	const submitHandler = (event: React.FormEvent) => {
 		event.preventDefault();
-		console.log("submitting...");
+
+		const storedUser = localStorage.getItem("user");
+
+		if (
+			userRef.current!.value.trim().length === 0 ||
+			passwordRef.current!.value.trim().length === 0
+		) {
+			setShowError(true);
+			return;
+		}
+
+		if (!storedUser) {
+			setShowError(true);
+			return;
+		}
+
+		const userData = JSON.parse(storedUser);
+		const fullUserName = `${userData.firstName} ${userData.lastName}`;
+
+		if (
+			(userRef.current!.value === userData.email &&
+				passwordRef.current!.value === userData.password) ||
+			(userRef.current!.value === fullUserName &&
+				passwordRef.current!.value === userData.password)
+		) {
+			localStorage.setItem("authenticated", "true");
+			return navigate("/dashboard");
+		}
 	};
 
 	return (
@@ -58,6 +88,7 @@ export const Login = () => {
 						onBlur={userBlurHandler}
 						type="text"
 						placeholder="user name"
+						className={`${showError ? classes.invalid : ""}`}
 					/>
 					<img
 						src={userIcon}
@@ -67,16 +98,28 @@ export const Login = () => {
 				</p>
 				<p
 					className={classes["input-wrapper"]}
-					onFocus={passFocusHandler}
-					onBlur={passBlurHandler}
+					onFocus={passwordFocusHandler}
+					onBlur={passwordBlurHandler}
 				>
-					<input ref={passRef} type="password" placeholder="password" />
+					<input
+						ref={passwordRef}
+						type="password"
+						placeholder="password"
+						className={`${showError ? classes.invalid : ""}`}
+					/>
 					<img
 						src={passwordIcon}
 						alt="Password icon"
-						className={passIsFocus ? classes.focus : ""}
+						className={passwordIsFocus ? classes.focus : ""}
 					/>
 				</p>
+
+				{showError && (
+					<p className={classes.error}>
+						Wow, invalid username or password.
+						<span>Plase, try again!</span>
+					</p>
+				)}
 
 				<div className={classes["buttons-wrapper"]}>
 					<button>Log in</button>
