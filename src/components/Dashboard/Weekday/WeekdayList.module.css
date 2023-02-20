@@ -1,0 +1,6 @@
+.weekday-list {
+   display: flex;
+   justify-content: flex-end;
+   margin-right: 30px;
+   gap: 2px;
+}

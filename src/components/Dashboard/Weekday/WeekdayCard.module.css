@@ -1,0 +1,48 @@
+
+.weekday-card {
+   list-style: none;
+   width: 195px;
+   height: 33px;
+   background-color: rgba(0, 0, 0, 0.7);
+   border-radius: 9px 9px 0px 0px;
+   display: flex;
+   align-items: center;
+   padding-left: 8px;
+   font-size: 20px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: width .2s;
+}
+
+.weekday-card.monday {
+   background-color: #FF0024;
+}
+
+.weekday-card.tuesday {
+   background-color: #FF8000;
+}
+
+.weekday-card.wednesday {
+   background-color: #FFCE00;
+}
+
+.weekday-card.thursday {
+   background-color: #FF0024b3;
+}
+
+.weekday-card.friday {
+   background-color: #FF8000b3;
+}
+
+.weekday-card.saturday {
+   background-color: #FFce00b3;
+}
+
+.weekday-card.sunday {
+   background-color: #FF002480;
+}
+
+.weekday-card.active {
+   width: 240px;
+   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+}
