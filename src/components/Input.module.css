@@ -1,0 +1,32 @@
+.input-group {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.input-group input {
+	width: 380px;
+	height: 35px;
+	border: 1px solid #ffffff;
+	border-radius: 50px;
+	background-color: rgba(38, 41, 44, 1);
+	margin-left: 17px;
+	font-size: 12px;
+	padding: 23px 25px;
+	color: #e0e0e0;
+	outline: none;
+}
+
+.input-group input::placeholder {
+	color: #e0e0e0;
+}
+
+.input-group input.invalid {
+	border: 1px solid #e9b425;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+	display: none;
+	-webkit-appearance: none;
+}
