@@ -1,0 +1,72 @@
+.board-row {
+	display: flex;
+	width: 100%;
+	gap: 17px;
+}
+
+.board-row .time {
+	min-width: 85px;
+	height: 85px;
+	border-radius: 10px;
+	color: #3b3e45;
+	font-size: 17px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.board-row .time.header {
+	box-shadow: 0px 4px 24px rgba(168, 168, 168, 0.25);
+	margin-bottom: 14px;
+	font-weight: 800;
+}
+
+.board-row .time.item {
+	background-color: #ff8000;
+	color: #000000;
+	font-weight: 600;
+}
+
+.board-row .tasks-row {
+	display: flex;
+	flex: 1;
+	gap: 16px;
+}
+
+.board-row .tasks-row li {
+	list-style: none;
+}
+
+.tasks-row li .task {
+	min-width: 512px;
+	height: 85px;
+	border: 1px solid #ffffff;
+	box-shadow: 0 4px 24px rgba(168, 168, 168, 0.25);
+	border-radius: 15px;
+	border-left: 14px solid #ff8000;
+	background-color: transparent;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	overflow: hidden;
+}
+
+.task p {
+	width: 400px;
+	font-size: 20px;
+	margin-left: 13px;
+}
+
+.task button {
+	width: 57px;
+	height: 25px;
+	background-color: #ff3d1f;
+	margin: 6px 7px 0 0;
+	border: none;
+	border-radius: 4px;
+	color: #ffffff;
+	font-weight: 800;
+	cursor: pointer;
+	align-self: flex-start;
+}
