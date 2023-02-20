@@ -68,6 +68,19 @@ export const Login = () => {
 			localStorage.setItem("authenticated", "true");
 			return navigate("/dashboard");
 		}
+
+		if (
+			userRef.current!.value !== userData.email ||
+			passwordRef.current!.value !== userData.password
+		) {
+			setShowError(true);
+			return;
+		}
+		
+		console.log(fullUserName === userRef.current!.value);
+
+
+
 	};
 
 	return (
