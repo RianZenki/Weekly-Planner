@@ -13,12 +13,14 @@ export const WeekdayList = () => {
 		<ul className={classes["weekday-list"]}>
 			{WEEKDAYS.map((weekday) => {
 				return (
-					<WeekdayCard
-						day={weekday}
-						className={
-							weekday === taskCtx.weekdaySelected ? "active" : ""
-						}
-					/>
+					<li key={weekday}>
+						<WeekdayCard
+							day={weekday}
+							className={
+								weekday === taskCtx.weekdaySelected ? "active" : ""
+							}
+						/>
+					</li>
 				);
 			})}
 		</ul>

@@ -15,14 +15,13 @@ export const WeekdayCard = (props: WeekdayCardProps) => {
 	const weekdayLowerCase = props.day.toLocaleLowerCase();
 
 	return (
-		<li
+		<div
 			className={`${classes["weekday-card"]} ${classes[weekdayLowerCase]} ${
 				props.className ? classes[props.className] : ""
 			} `}
-			key={weekdayLowerCase}
 			onClick={() => taskCtx.onWeekdayChange(props.day)}
 		>
 			{props.day}
-		</li>
+		</div>
 	);
 };
