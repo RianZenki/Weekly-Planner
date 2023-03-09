@@ -83,11 +83,17 @@ export const TaskContextProvider = ({ children }: childrenProps) => {
 		const taskIndex = oldTasks[weekdayIndex].taskList[
 			taskTimeIndex
 		].tasks.findIndex((item) => item.id === id);
-		oldTasks[weekdayIndex].taskList[
-			taskTimeIndex
-		].tasks.splice(taskIndex, 1);
 
-		setTasks(oldTasks)
+		if (oldTasks[weekdayIndex].taskList[taskTimeIndex].tasks.length > 1) {
+			oldTasks[weekdayIndex].taskList[taskTimeIndex].tasks.splice(
+				taskIndex,
+				1
+			);
+		} else {
+			oldTasks[weekdayIndex].taskList.splice(taskTimeIndex, 1);
+		}
+
+		setTasks(oldTasks);
 	};
 
 	const deleteAllTasksHandler = (weekday: string) => {
