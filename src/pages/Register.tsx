@@ -196,7 +196,7 @@ export const Register = () => {
 				<Input
 					type="password"
 					label="password"
-					placeholder="Confirm yout password"
+					placeholder="Confirm your password"
 					id="confirmPassword"
 					onChange={confirmPassChangeHandler}
 					onBlur={confirmPassInputBlurHandler}
