@@ -76,11 +76,8 @@ export const Login = () => {
 			setShowError(true);
 			return;
 		}
-		
+
 		console.log(fullUserName === userRef.current!.value);
-
-
-
 	};
 
 	return (
@@ -130,7 +127,7 @@ export const Login = () => {
 				{showError && (
 					<p className={classes.error}>
 						Wow, invalid username or password.
-						<span>Plase, try again!</span>
+						<span>Please, try again!</span>
 					</p>
 				)}
 
