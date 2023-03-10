@@ -166,7 +166,7 @@ export const Register = () => {
 				/>
 				<Input
 					label="City"
-					placeholder="Your first name"
+					placeholder="Your City"
 					id="city"
 					onChange={cityChangeHandler}
 					onBlur={cityInputBlurHandler}
