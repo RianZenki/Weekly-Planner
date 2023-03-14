@@ -28,10 +28,11 @@ npm start
 * Protected route
 * Dynamically managing tasks in the board
 * Display date and time in real time
+* Display the weather of the registered city 
 
 ## Versioning
 
-1.0.0
+1.0.1
 
 ## Authors
 
