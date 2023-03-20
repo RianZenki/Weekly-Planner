@@ -50,16 +50,13 @@ export const Board = () => {
 		return groupTasks(transformedTasks);
 	};
 
-	const fetchTasks = async () => {
-		const response = await fetch(
-			`${baseUrl}/events?dayOfWeek=${weekdaySelected}`,
-			{
-				method: "GET",
-				headers: {
-					Authorization: "Bearer " + userToken,
-				},
-			}
-		);
+	const fetchTasks = async (weekday: string) => {
+		const response = await fetch(`${baseUrl}/events?dayOfWeek=${weekday}`, {
+			method: "GET",
+			headers: {
+				Authorization: "Bearer " + userToken,
+			},
+		});
 
 		const data = await response.json();
 
@@ -70,7 +67,7 @@ export const Board = () => {
 	useEffect(() => {
 		if (userToken) {
 			setTasks({});
-			fetchTasks();
+			fetchTasks(weekdaySelected);
 		}
 	}, [weekdaySelected, userToken]);
 
