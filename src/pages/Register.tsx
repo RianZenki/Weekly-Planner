@@ -18,7 +18,12 @@ export const Register = () => {
 		hasError: enteredFirstNameHasError,
 		valueChangeHandler: firstNameChangeHandler,
 		inputBlurHandler: firstNameInputBlurHandler,
-	} = useInput((value) => value.trim() !== "" && value.trim().length > 3);
+	} = useInput(
+		(value) =>
+			value.trim() !== "" &&
+			value.trim().length > 2 &&
+			RegExp(/^[a-zA-Z]+$/).test(value)
+	);
 
 	const {
 		value: enteredLastName,
@@ -26,7 +31,12 @@ export const Register = () => {
 		hasError: enteredLastNameHasError,
 		valueChangeHandler: lastNameChangeHandler,
 		inputBlurHandler: lastNameInputBlurHandler,
-	} = useInput((value) => value.trim() !== "" && value.trim().length > 3);
+	} = useInput(
+		(value) =>
+			value.trim() !== "" &&
+			value.trim().length > 2 &&
+			RegExp(/^[a-zA-Z]+$/).test(value)
+	);
 
 	const {
 		value: enteredBirthDate,
@@ -42,7 +52,12 @@ export const Register = () => {
 		hasError: enteredCountryHasError,
 		valueChangeHandler: countryChangeHandler,
 		inputBlurHandler: countryInputBlurHandler,
-	} = useInput((value) => value.trim() !== "" && value.trim().length > 3);
+	} = useInput(
+		(value) =>
+			value.trim() !== "" &&
+			value.trim().length > 3 &&
+			RegExp(/^[a-zA-Z]+$/).test(value)
+	);
 
 	const {
 		value: enteredCity,
@@ -50,7 +65,12 @@ export const Register = () => {
 		hasError: enteredCityHasError,
 		valueChangeHandler: cityChangeHandler,
 		inputBlurHandler: cityInputBlurHandler,
-	} = useInput((value) => value.trim() !== "" && value.trim().length > 3);
+	} = useInput(
+		(value) =>
+			value.trim() !== "" &&
+			value.trim().length > 3 &&
+			RegExp(/^[a-zA-Z\s]+$/).test(value)
+	);
 
 	const {
 		value: enteredEmail,
@@ -58,7 +78,10 @@ export const Register = () => {
 		hasError: enteredEmailHasError,
 		valueChangeHandler: emailChangeHandler,
 		inputBlurHandler: emailInputBlurHandler,
-	} = useInput((value) => value.trim() !== "" && value.includes("@"));
+	} = useInput(
+		(value) =>
+			value.trim() !== "" && value.includes("@") && value.includes(".")
+	);
 
 	const {
 		value: enteredPassword,
@@ -128,7 +151,7 @@ export const Register = () => {
 			setTimeout(() => {
 				setShowAlert(false);
 			}, 3000);
-			return
+			return;
 		} else {
 			navigate("/");
 		}
