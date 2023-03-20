@@ -14,7 +14,7 @@ export const DashboardHeader = () => {
 
 	const logoutHandler = () => {
 		localStorage.removeItem("user");
-		localStorage.removeItem("authenticated");
+		localStorage.removeItem("token");
 		navigate("/");
 	};
 

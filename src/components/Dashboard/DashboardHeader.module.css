@@ -28,7 +28,7 @@
    width: 176px;
    display: flex;
    flex-direction: column;
-   align-items: end;
+   align-items: flex-end;
    margin-left: 150px;
    gap: 21px;
 }
