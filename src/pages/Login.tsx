@@ -1,10 +1,10 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Oval } from "react-loader-spinner";
 
 import { AuthTemplate } from "../components/AuthTemplate";
 import { Heading } from "../components/Heading";
-import { UserContext } from "../store/user-context";
+import { Alert, AlertType } from "../components/Alert/Alert";
 import { baseUrl } from "../utils/api";
 
 import userIcon from "../assets/user-icon.png";
@@ -19,9 +19,10 @@ export const Login = () => {
 	const [passwordIsFocus, setPasswordIsFocus] = useState<boolean>(false);
 	const [showError, setShowError] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [showAlert, setShowAlert] = useState<boolean>(false);
+	const [alertInfo, setAlertInfo] = useState<AlertType>();
 
 	const navigate = useNavigate();
-	const userCtx = useContext(UserContext);
 
 	const userFocusHandler = () => {
 		setUserIsFocus(true);
@@ -57,14 +58,26 @@ export const Login = () => {
 
 		const data = await response.json();
 
-		if (!response.ok) {
-			alert(data.message);
+		if (!response.ok && response.status === 400) {
+			setAlertInfo({ type: "error", description: data.message || data });
+			setShowAlert(true);
+			setTimeout(() => {
+				setShowAlert(false);
+			}, 3000);
+			return;
 		}
 
-		console.log(data);
+		if (!response.ok && response.status === 403) {
+			setAlertInfo({ type: "error", description: data });
+			setShowAlert(true);
+			setTimeout(() => {
+				setShowAlert(false);
+			}, 3000);
+			return;
+		}
+
 		localStorage.setItem("token", data.token);
 		localStorage.setItem("user", JSON.stringify(data.user));
-		userCtx.onStoreUserInfo({ token: data.token, user: data.user });
 		navigate("/dashboard");
 	};
 
@@ -90,6 +103,12 @@ export const Login = () => {
 
 	return (
 		<AuthTemplate>
+			{showAlert && (
+				<Alert
+					type={alertInfo?.type}
+					description={alertInfo?.description}
+				/>
+			)}
 			<div className={classes.heading}>
 				<Heading
 					title="Welcome,"
