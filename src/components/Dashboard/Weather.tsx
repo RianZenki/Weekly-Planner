@@ -17,10 +17,11 @@ export const Weather = () => {
 	const [weather, setWeather] = useState<WeatherType>();
 
 	const storedUser = localStorage.getItem("user");
+	const storedToken = localStorage.getItem("token");
 
-	if (!storedUser) {
+	if (!storedUser || !storedToken) {
 		localStorage.removeItem("user");
-		localStorage.removeItem("authenticated");
+		localStorage.removeItem("token");
 		navigate("/");
 	}
 
