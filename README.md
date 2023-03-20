@@ -24,11 +24,11 @@ npm start
 
 ## Features 
 
-* Persist data using Local Storage
-* Protected route
+* Users and tasks managemented using external API
 * Dynamically managing tasks in the board
 * Display date and time in real time
 * Display the weather of the registered city 
+
 
 ## Versioning
 
