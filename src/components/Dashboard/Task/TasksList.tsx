@@ -1,18 +1,34 @@
 import { BoardRow } from "./BoardRow";
+import { TaskType } from "../../../types/task";
 
 import classes from "./TasksList.module.css";
 
 type tasksListProps = {
 	list: {
-		time: string;
-		tasks: {
-			id: string;
-			description: string;
-		}[];
-	}[];
+		[key: string]: TaskType[];
+	};
 };
 
 export const TasksList = ({ list }: tasksListProps) => {
+	const boardRows = [];
+
+	for (const key in list) {
+		boardRows.push(<BoardRow key={key} data={list[key]} />);
+	}
+
+	boardRows.sort((a, b) => {
+		const timeA = a.key;
+		const timeB = b.key;
+		if (timeA! < timeB!) {
+			return -1;
+		}
+		if (timeA! > timeB!) {
+			return 1;
+		}
+
+		return 0;
+	});
+
 	return (
 		<>
 			<div className={classes["board-row"]}>
@@ -22,9 +38,7 @@ export const TasksList = ({ list }: tasksListProps) => {
 				<ul className={classes["tasks-row"]}></ul>
 			</div>
 
-			{list.map((row) => (
-				<BoardRow data={row} />
-			))}
+			{boardRows.length > 0 && boardRows}
 		</>
 	);
 };

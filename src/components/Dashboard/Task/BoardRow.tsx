@@ -1,43 +1,35 @@
-import { useContext } from "react";
-
 import { TaskCard } from "./TaskCard";
-import { TaskContext } from "../../../store/task-context";
+import { TaskType } from '../../../types/task'
 
 import classes from "./BoardRow.module.css";
 
 type BoardRowProps = {
-	data: {
-		time: string;
-		tasks: {
-			id: string;
-			description: string;
-		}[];
-	};
+	data: TaskType[]
 };
 
 export const BoardRow = ({ data }: BoardRowProps) => {
-	const taskCtx = useContext(TaskContext);
-	const selectedWeekday = taskCtx.weekdaySelected.toLocaleLowerCase();
+	const weekday = data[0].dayOfWeek
+	const time = data[0].time
 
-   const taskList = data.tasks;
+	const taskList = data;
 
 	const taskClass = taskList.length > 1 ? "conflict" : "";
 
 	return (
 		<div className={classes["board-row"]}>
 			<div
-				className={`${classes.time} ${classes.item} ${classes[selectedWeekday]} ${classes[taskClass]}`}
+				className={`${classes.time} ${classes.item} ${classes[weekday]} ${classes[taskClass]}`}
 			>
-				<p>{data.time}</p>
+				<p>{time}</p>
 			</div>
 			<ul className={`${classes["tasks-row"]} ${classes[taskClass]}`}>
-				{taskList.map((task) => (
-					<li key={task.id}>
+				{taskList.map((task: TaskType) => (
+					<li key={task._id}>
 						<TaskCard
 							className={taskClass}
 							description={task.description}
-							time={data.time}
-							id={task.id}
+							weekday={task.dayOfWeek}
+							id={task._id}
 						/>
 					</li>
 				))}
