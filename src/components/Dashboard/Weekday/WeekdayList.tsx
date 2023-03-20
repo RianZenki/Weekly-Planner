@@ -2,12 +2,12 @@ import { useContext } from "react";
 
 import { WeekdayCard } from "./WeekdayCard";
 import { WEEKDAYS } from "../../../pages/Dashboard";
-import { TaskContext } from "../../../store/task-context";
+import { UserContext } from "../../../store/user-context";
 
 import classes from "./WeekdayList.module.css";
 
 export const WeekdayList = () => {
-	const taskCtx = useContext(TaskContext);
+	const taskCtx = useContext(UserContext);
 
 	return (
 		<ul className={classes["weekday-list"]}>
