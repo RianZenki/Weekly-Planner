@@ -15,9 +15,9 @@ type PropsComponentType = {
 };
 
 type AlertElementProps = {
-   description?: string,
-   propsComponent: PropsComponentType
-}
+	description?: string;
+	propsComponent: PropsComponentType;
+};
 
 const AlertElement = (props: AlertElementProps) => {
 	return (
@@ -60,7 +60,15 @@ export const Alert = ({ type, description }: AlertType) => {
 		};
 	}
 
-	return <>
-      {ReactDOM.createPortal(<AlertElement description={description} propsComponent={propsComponent} />, document.getElementById("alert-root")!)}
-   </>;
+	return (
+		<>
+			{ReactDOM.createPortal(
+				<AlertElement
+					description={description}
+					propsComponent={propsComponent}
+				/>,
+				document.getElementById("alert-root")!
+			)}
+		</>
+	);
 };
