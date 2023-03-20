@@ -1,38 +1,37 @@
-import { useContext } from "react";
+import { useState } from "react";
 
-import { TaskContext } from "../../../store/task-context";
+import { ConfirmModal } from "./ConfirmModal";
 
 import classes from "./TaskCard.module.css";
 
 type taskCardProps = {
 	description: string;
 	className: string;
-	time: string;
 	id: string;
+	weekday: string;
 };
 
 export const TaskCard = (props: taskCardProps) => {
-	const taskCtx = useContext(TaskContext);
-	const selectedWeekday = taskCtx.weekdaySelected.toLocaleLowerCase();
+	const [showModal, setShowModal] = useState<boolean>(false);
+
+	const closeModalHandler = () => {
+		setShowModal(false);
+	};
 
 	return (
-		<div
-			className={`${classes.task} ${classes[selectedWeekday]} ${
-				classes[props.className]
-			}`}
-		>
-			<p>{props.description}</p>
-			<button
-				onClick={() =>
-					taskCtx.onDeleteTaskById(
-						props.id,
-						props.time,
-						taskCtx.weekdaySelected
-					)
-				}
+		<>
+			<div
+				className={`${classes.task} ${classes[props.weekday]} ${
+					classes[props.className]
+				}`}
 			>
-				Delete
-			</button>
-		</div>
+				<p>{props.description}</p>
+				<button onClick={() => setShowModal(true)}>Delete</button>
+			</div>
+
+			{showModal && (
+				<ConfirmModal onCloseModal={closeModalHandler} id={props.id} />
+			)}
+		</>
 	);
 };
