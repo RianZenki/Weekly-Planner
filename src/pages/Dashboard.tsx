@@ -23,11 +23,8 @@ export const Dashboard = () => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (
-			!localStorage.getItem("user") ||
-			!localStorage.getItem("authenticated")
-		) {
-			navigate("/");
+		if (!localStorage.getItem("token")) {
+			navigate("/")
 		}
 	}, [navigate]);
 
