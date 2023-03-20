@@ -1,10 +1,9 @@
 import ReactDOM from "react-dom";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Oval } from "react-loader-spinner";
 
 import { Heading } from "../../Heading";
 import { baseUrl } from "../../../utils/api";
-import { UserContext } from "../../../store/user-context";
 import warning from "../../../assets/warning.png";
 
 import classes from "./ConfirmModal.module.css";
@@ -28,11 +27,8 @@ const Backdrop = (props: BackDropProps) => {
 };
 
 const ModalOverlay = (props: ModalOverlayProps) => {
-	const userCtx = useContext(UserContext);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const token = localStorage.getItem("token");
-
-	const weekday = userCtx.weekdaySelected;
 
 	const deleteTaskHandler = async () => {
 		setIsLoading(true);
@@ -46,11 +42,10 @@ const ModalOverlay = (props: ModalOverlayProps) => {
 		});
 
 		if (response.ok) {
-			userCtx.onWeekdayChange(weekday);
+			props.onClose();
 		}
 
 		setIsLoading(false);
-		props.onClose();
 	};
 
 	return (
