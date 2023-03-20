@@ -1,8 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Oval } from "react-loader-spinner";
 
 import { AuthTemplate } from "../components/AuthTemplate";
 import { Heading } from "../components/Heading";
+import { UserContext } from "../store/user-context";
+import { baseUrl } from "../utils/api";
 
 import userIcon from "../assets/user-icon.png";
 import passwordIcon from "../assets/password-icon.png";
@@ -12,11 +15,13 @@ import classes from "./Login.module.css";
 export const Login = () => {
 	const userRef = useRef<HTMLInputElement>(null);
 	const passwordRef = useRef<HTMLInputElement>(null);
-	const [userIsFocus, setUserIsFocus] = useState(false);
-	const [passwordIsFocus, setPasswordIsFocus] = useState(false);
-	const [showError, setShowError] = useState(false);
+	const [userIsFocus, setUserIsFocus] = useState<boolean>(false);
+	const [passwordIsFocus, setPasswordIsFocus] = useState<boolean>(false);
+	const [showError, setShowError] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const navigate = useNavigate();
+	const userCtx = useContext(UserContext);
 
 	const userFocusHandler = () => {
 		setUserIsFocus(true);
@@ -38,46 +43,49 @@ export const Login = () => {
 		}
 	};
 
-	const submitHandler = (event: React.FormEvent) => {
+	const loginUser = async () => {
+		const response = await fetch(`${baseUrl}/users/sign-in`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				email: userRef.current!.value,
+				password: passwordRef.current!.value,
+			}),
+		});
+
+		const data = await response.json();
+
+		if (!response.ok) {
+			alert(data.message);
+		}
+
+		console.log(data);
+		localStorage.setItem("token", data.token);
+		localStorage.setItem("user", JSON.stringify(data.user));
+		userCtx.onStoreUserInfo({ token: data.token, user: data.user });
+		navigate("/dashboard");
+	};
+
+	const submitHandler = async (event: React.FormEvent) => {
 		event.preventDefault();
 
-		const storedUser = localStorage.getItem("user");
-
 		if (
-			userRef.current!.value.trim().length === 0 ||
-			passwordRef.current!.value.trim().length === 0
+			(userRef.current!.value.trim().length < 3 &&
+				userRef.current!.value.indexOf("@") === -1) ||
+			passwordRef.current!.value.trim().length < 6
 		) {
 			setShowError(true);
 			return;
 		}
 
-		if (!storedUser) {
-			setShowError(true);
-			return;
-		}
+		setIsLoading(true);
 
-		const userData = JSON.parse(storedUser);
-		const fullUserName = `${userData.firstName} ${userData.lastName}`;
+		await loginUser();
 
-		if (
-			(userRef.current!.value === userData.email &&
-				passwordRef.current!.value === userData.password) ||
-			(userRef.current!.value === fullUserName &&
-				passwordRef.current!.value === userData.password)
-		) {
-			localStorage.setItem("authenticated", "true");
-			return navigate("/dashboard");
-		}
-
-		if (
-			userRef.current!.value !== userData.email ||
-			passwordRef.current!.value !== userData.password
-		) {
-			setShowError(true);
-			return;
-		}
-
-		console.log(fullUserName === userRef.current!.value);
+		setIsLoading(false);
+		setShowError(false);
 	};
 
 	return (
@@ -132,7 +140,22 @@ export const Login = () => {
 				)}
 
 				<div className={classes["buttons-wrapper"]}>
-					<button>Log in</button>
+					<button disabled={isLoading}>
+						{!isLoading && "Log in"}
+						{isLoading && (
+							<Oval
+								height={30}
+								width={30}
+								color="#ffffff"
+								visible={true}
+								ariaLabel="oval-loading"
+								secondaryColor="#ffffff"
+								strokeWidth={5}
+								strokeWidthSecondary={5}
+							/>
+						)}
+						{isLoading && "Sending..."}
+					</button>
 					<p>
 						Don't have an account? <Link to="register">Register now</Link>
 					</p>
