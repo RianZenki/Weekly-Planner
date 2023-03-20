@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Oval } from "react-loader-spinner";
 
 import { useInput } from "../hooks/use-input";
+import { Alert, AlertType } from "../components/Alert/Alert";
 import { Input } from "../components/Input";
 import { AuthTemplate } from "../components/AuthTemplate";
 import { Heading } from "../components/Heading";
@@ -87,6 +88,8 @@ export const Register = () => {
 
 	const [showError, setShowError] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [showAlert, setShowAlert] = useState<boolean>(false);
+	const [alertInfo, setAlertInfo] = useState<AlertType>();
 	const navigate = useNavigate();
 
 	const formIsValid =
@@ -118,10 +121,16 @@ export const Register = () => {
 		});
 
 		const data = await response.json();
-		console.log(response.body);
-		console.log(data);
+
 		if (!response.ok) {
-			alert(data);
+			setAlertInfo({ type: "warning", description: data });
+			setShowAlert(true);
+			setTimeout(() => {
+				setShowAlert(false);
+			}, 3000);
+			return
+		} else {
+			navigate("/");
 		}
 	};
 
@@ -135,7 +144,6 @@ export const Register = () => {
 			await registerUser();
 
 			setIsLoading(false);
-			// return navigate("/");
 		} else {
 			setShowError(true);
 			return;
@@ -144,6 +152,12 @@ export const Register = () => {
 
 	return (
 		<AuthTemplate>
+			{showAlert && (
+				<Alert
+					type={alertInfo?.type}
+					description={alertInfo?.description}
+				/>
+			)}
 			<div className={classes.heading}>
 				<Heading title="Welcome," text="Please, register to continue" />
 			</div>
