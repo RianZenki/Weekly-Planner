@@ -1,10 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Oval } from "react-loader-spinner";
 
 import { useInput } from "../hooks/use-input";
 import { Input } from "../components/Input";
 import { AuthTemplate } from "../components/AuthTemplate";
 import { Heading } from "../components/Heading";
+import { baseUrl } from "../utils/api";
 
 import classes from "./Register.module.css";
 
@@ -65,7 +67,7 @@ export const Register = () => {
 		inputBlurHandler: passwordInputBlurHandler,
 	} = useInput((value) =>
 		RegExp(
-			"^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{4,})"
+			"^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})"
 		).test(value)
 	);
 
@@ -79,11 +81,12 @@ export const Register = () => {
 		(value) =>
 			value.trim() === enteredPassword &&
 			RegExp(
-				"^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{4,})"
+				"^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})"
 			).test(value)
 	);
 
-	const [showError, setShowError] = useState(false);
+	const [showError, setShowError] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const navigate = useNavigate();
 
 	const formIsValid =
@@ -96,24 +99,43 @@ export const Register = () => {
 		enteredPasswordIsValid &&
 		enteredConfirmPassIsValid;
 
-	const formSubmitHandler = (event: React.FormEvent) => {
+	const registerUser = async () => {
+		const response = await fetch(`${baseUrl}/users/sign-up`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				firstName: enteredFirstName,
+				lastName: enteredLastName,
+				birthDate: enteredBirthDate,
+				country: enteredCountry,
+				city: enteredCity,
+				email: enteredEmail,
+				password: enteredPassword,
+				confirmPassword: enteredConfirmPass,
+			}),
+		});
+
+		const data = await response.json();
+		console.log(response.body);
+		console.log(data);
+		if (!response.ok) {
+			alert(data);
+		}
+	};
+
+	const formSubmitHandler = async (event: React.FormEvent) => {
 		event.preventDefault();
 
 		if (formIsValid) {
 			setShowError(false);
-			localStorage.setItem(
-				"user",
-				JSON.stringify({
-					firstName: enteredFirstName,
-					lastName: enteredLastName,
-					birthDate: enteredBirthDate,
-					country: enteredCountry,
-					city: enteredCity,
-					email: enteredEmail,
-					password: enteredPassword,
-				})
-			);
-			return navigate("/");
+			setIsLoading(true);
+
+			await registerUser();
+
+			setIsLoading(false);
+			// return navigate("/");
 		} else {
 			setShowError(true);
 			return;
@@ -208,7 +230,22 @@ export const Register = () => {
 					<p className={classes.error}>Form invalid! Please try again.</p>
 				)}
 				<div className={classes["buttons-wrapper"]}>
-					<button>Register Now</button>
+					<button>
+						{!isLoading && "Register Now"}
+						{isLoading && (
+							<Oval
+								height={30}
+								width={30}
+								color="#ffffff"
+								visible={true}
+								ariaLabel="oval-loading"
+								secondaryColor="#ffffff"
+								strokeWidth={5}
+								strokeWidthSecondary={5}
+							/>
+						)}
+						{isLoading && "Sending..."}
+					</button>
 					<p>
 						Already have an account? <Link to="/">Login now</Link>
 					</p>
