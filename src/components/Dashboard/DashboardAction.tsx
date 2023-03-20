@@ -1,33 +1,73 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
+import { Oval } from "react-loader-spinner";
 
-import { TaskContext } from "../../store/task-context";
-
+import { UserContext } from "../../store/user-context";
 import plus from "../../assets/plus.png";
 import minus from "../../assets/minus.png";
 import { WEEKDAYS } from "../../pages/Dashboard";
+import { baseUrl } from "../../utils/api";
 
 import classes from "./DashboardAction.module.css";
 
 export const DashboardAction = () => {
-	const taskCtx = useContext(TaskContext);
-	const selectedWeekday = taskCtx.weekdaySelected;
+	const userCtx = useContext(UserContext);
+	const weekdaySelected = userCtx.weekdaySelected.toLocaleLowerCase();
+	const userToken = localStorage.getItem("token");
+	const [isAddLoading, setIsAddLoading] = useState<boolean>(false);
+	const [isDelLoading, setIsDelLoading] = useState<boolean>(false);
 
 	const inputRef = useRef<HTMLInputElement>(null);
 	const weekdayRef = useRef<HTMLSelectElement>(null);
 	const timeRef = useRef<HTMLSelectElement>(null);
 
-	const addNewTask = () => {
-		if (inputRef.current!.value === "") {
+	const addNewTaskHandler = async () => {
+		if (
+			inputRef.current!.value === "" ||
+			inputRef.current!.value.length < 3
+		) {
 			return;
 		}
+		setIsAddLoading(true);
 
-		taskCtx.onAddTask({
-			task: inputRef.current!.value,
-			weekday: weekdayRef.current!.value,
-			time: timeRef.current!.value,
+		const response = await fetch(`${baseUrl}/events`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + userToken,
+			},
+			body: JSON.stringify({
+				description: `${timeRef.current!.value} - ${
+					inputRef.current!.value
+				}`,
+				dayOfWeek: weekdayRef.current!.value,
+			}),
 		});
 
+		const data = await response.json();
+
+		console.log(data);
+
 		inputRef.current!.value = "";
+		setIsAddLoading(false);
+	};
+
+	const deleteAllTasksHandler = async () => {
+		setIsDelLoading(true);
+
+		const response = await fetch(
+			`${baseUrl}/events?dayOfWeek=${weekdaySelected}`,
+			{
+				method: "DELETE",
+				headers: {
+					Authorization: "Bearer " + userToken,
+				},
+			}
+		);
+
+		const data = await response.json();
+		console.log(data);
+
+		setIsDelLoading(false);
 	};
 
 	return (
@@ -72,18 +112,55 @@ export const DashboardAction = () => {
 					<button
 						type="button"
 						className={classes.add}
-						onClick={addNewTask}
+						onClick={addNewTaskHandler}
 					>
-						<img src={plus} alt={plus} />
-						Add to Calendar
+						{!isAddLoading && (
+							<>
+								<img src={plus} alt={plus} />
+								Add to Calendar
+							</>
+						)}
+
+						{isAddLoading && (
+							<Oval
+								height={20}
+								width={20}
+								color="#ffffff"
+								visible={true}
+								ariaLabel="oval-loading"
+								secondaryColor="#ffffff"
+								strokeWidth={5}
+								strokeWidthSecondary={5}
+							/>
+						)}
+						{isAddLoading && "Adding..."}
 					</button>
+
 					<button
 						className={classes.delete}
 						type="button"
-						onClick={() => taskCtx.onDeleteAllTasks(selectedWeekday)}
+						onClick={deleteAllTasksHandler}
 					>
-						<img src={minus} alt={minus} />
-						Delete All
+						{!isDelLoading && (
+							<>
+								<img src={minus} alt={minus} />
+								Delete All
+							</>
+						)}
+
+						{isDelLoading && (
+							<Oval
+								height={20}
+								width={20}
+								color="#ffffff"
+								visible={true}
+								ariaLabel="oval-loading"
+								secondaryColor="#ffffff"
+								strokeWidth={5}
+								strokeWidthSecondary={5}
+							/>
+						)}
+						{isDelLoading && "Deleting..."}
 					</button>
 				</div>
 			</form>
